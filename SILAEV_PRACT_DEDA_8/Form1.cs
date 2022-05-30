@@ -17,6 +17,7 @@ namespace SILAEV_PRACT_DEDA_8
             InitializeComponent();
         }
 
+        // две булевые переменные которые определяют где будет отрисовываться объект
         bool panel = true;
         bool form = false;
 
@@ -56,6 +57,8 @@ namespace SILAEV_PRACT_DEDA_8
         WebBrowser
         */
 
+        // массивы динамически созданных элементов которые
+        // при добавлении нового элемента массив увеличивается на 1 элемент, и потом он отрисовывается
         private Button[] arr_Button= new Button[0];
         private CheckBox[] arr_CheckBox = new CheckBox[0];
         private CheckedListBox[] arr_CheckedListBox = new CheckedListBox[0];
@@ -90,6 +93,7 @@ namespace SILAEV_PRACT_DEDA_8
         private VScrollBar[] arr_VScrollBar = new VScrollBar[0];
         private WebBrowser[] arr_WebBrowser = new WebBrowser[0];
 
+        // группа переменных которая определяет сколько элементов какого либо типа на форме
         private int form_count_Button = 0;
         private int form_count_CheckBox = 0;
         private int form_count_CheckedListBox = 0;
@@ -125,6 +129,7 @@ namespace SILAEV_PRACT_DEDA_8
         private int form_count_WebBrowser = 0;
         private int c = 0;
 
+        // группа переменных которая определяет сколько элементов какого либо типа на панели
         private int panel_count_Button = 0;
         private int panel_count_CheckBox = 0;
         private int panel_count_CheckedListBox = 0;
@@ -161,15 +166,23 @@ namespace SILAEV_PRACT_DEDA_8
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            // 1 - Программа начинается с загрузки формы
+            // при загрузке формы мы меняем размер самой формы(параметр Width), это сделанно чтобы все элементы уместились на ней(я пытался расширять форму в конструкторе, но при запуске она постоянно была меньше чем надо)
+            // далее мы меняем позицию формы на экране(параметр Location) чтобы она уместилась на экран пользователя
+            // Далее мы вызываем две функции которые будут описывать свойства уже имеющихся на форме элементов, одна считывает элементы на форме, вторая на панели
             this.Width = 1400;
             this.Location = new Point(10, 10);
             Panel_Controls_Info();
             Form_Controls_Info();
         }
 
+        Random rnd = new Random();
+
         private void panelNewControl(Control[] arr_c, int c, bool panel, bool form)
         {
-            Random rnd = new Random();
+            // данная функция вызывается для окончательной отрисовки элемента
+            // в функции, переданный в функцию массив увеличивается на 1 , потом идет свитч который определяет какой элемент создавать(он это определяет по числу которое было переданно в функцию
+            // далее идут два ифа с булевыми переменными, если переменная "panel" равна true, то переменная отрисуется на панели, если переменная form равна true, то переменная отрисуется на форме
             Array.Resize(ref arr_c, arr_c.Length + 1);
             switch (c)
             {
@@ -318,24 +331,31 @@ namespace SILAEV_PRACT_DEDA_8
             }
             if (panel)
             {
+                // генерируется положение элемента рандомным образом
                 arr_c[arr_c.Length - 1].Location = new Point(rnd.Next(0, panel1.Width - 20), rnd.Next(0, panel1.Height - 20));
+                // генерируется размер элемента рандомным образом
                 arr_c[arr_c.Length - 1].Size = new Size(rnd.Next(20, panel1.Width - arr_c[arr_c.Length - 1].Location.X), rnd.Next(20, panel1.Height - arr_c[arr_c.Length - 1].Location.Y));
                 panel1.Controls.Add(arr_c[arr_c.Length - 1]);
             }
             if (form)
             {
+                // генерируется положение элемента рандомным образом
                 arr_c[arr_c.Length - 1].Location = new Point(rnd.Next(panel1.Width + panel1.Location.X+10, richTextBox1.Location.X - 10), rnd.Next(panel1.Location.Y + 10, panel1.Height + panel1.Location.Y - 10));
+                // генерируется размер элемента рандомным образом
                 arr_c[arr_c.Length - 1].Size = new Size(rnd.Next(10, richTextBox1.Location.X - arr_c[arr_c.Length - 1].Location.X), rnd.Next(10, (panel1.Height + panel1.Location.Y) - arr_c[arr_c.Length - 1].Location.Y));
                 Controls.Add(arr_c[arr_c.Length - 1]);
             }
+            // элемент переходит на 1 план на форме или на панели
             arr_c[arr_c.Length - 1].BringToFront();
         }
 
         private void NewControlAllForm(bool panel,bool form)
         {
-            Random rnd = new Random();
-            //int temp = rnd.Next(33);
-            int temp = 31;
+            // функция вызывается при создании нового обьекта
+            // далее рандомайзером Random - "rnd" который был создан выше по коду генерируется число от 0 до 32
+            // далее данное число попадает в swith и уже в свиче вызывется функция которая окончательно будет отрисовывать элемент
+            // в функцию передаются массив который был создан динамически выше, само число которое было сгенерированно(оно понадобиться в следующей функции) и две булевые переменные которые будут определять где будет отрисовываться элемент
+            int temp = rnd.Next(33);
             switch (temp)
             {
                 case 0:
@@ -480,6 +500,9 @@ namespace SILAEV_PRACT_DEDA_8
 
         private void button1_Click(object sender, EventArgs e)
         {
+            // при нажатии на первую кнопку вызывается данная функция
+            // в функции есть два переключения булевых переменных, которые переключаются таким образом чтобы была верной только переменная panel
+            // далее вызывается функция создания и отрисовки нового элемента в которой будет определено где будет отрисовываться новый элемент, на форме или на панели
             panel = true;
             form = false;
             // Panel
@@ -488,6 +511,9 @@ namespace SILAEV_PRACT_DEDA_8
 
         private void button2_Click(object sender, EventArgs e)
         {
+            // при нажатии на вторую кнопку вызывается данная функция
+            // в функции есть два переключения булевых переменных, которые переключаются таким образом чтобы была верной только переменная form
+            // далее вызывается функция создания и отрисовки нового элемента в которой будет определено где будет отрисовываться новый элемент, на форме или на панели
             // Form
             panel = false;
             form = true;
@@ -496,7 +522,9 @@ namespace SILAEV_PRACT_DEDA_8
 
         private void panelControlInf(string name, ref int ContrlCount, IEnumerable<Control> panel)
         {
-
+            // вывод информаци  о элементе на панели на второй ричтекстбокс
+            // в функции есть внутрений счетчик "с"
+            // а также внешний счетчик который передается по ссылке
             c = 0;
             ContrlCount = 0;
             foreach (var item in panel)
@@ -514,7 +542,9 @@ namespace SILAEV_PRACT_DEDA_8
 
         private void ControlInf(string name, ref int ContrlCount, IEnumerable<Control> control)
         {
-
+            // вывод информаци  о элементе на форме на первый ричтекстбокс 
+            // в функции есть внутрений счетчик "с"
+            // а также внешний счетчик который передается по ссылке
             c = 0;
             ContrlCount = 0;
             foreach (var item in control)
@@ -532,6 +562,9 @@ namespace SILAEV_PRACT_DEDA_8
 
         private void Panel_Controls_Info()
         {
+            // функция которая описывает свойства о элементах на панели в второй ричтекстбокс
+            // функция содержит много ифов, они нужны для того чтобы функция вывода информации не вызывалась для тех групп элементов которые вообще отсутствуют на панели(это было сделанно потому что при выводе описания о элементах, появлялись лишние пробелы)
+            // данные передаваемые в функцию, это строка с названием элемента, ссылка на переменную которая будет считать элементы на форме, и группу элементов которые принадленат к группе каких либо элементов(например группа кнопок, или тестбоксов)
             richTextBox2.Clear();
             richTextBox2.Text += "Controls on Panel\n\n";
             if (panel1.Controls.OfType<Button>().Count() != 0)
@@ -669,6 +702,10 @@ namespace SILAEV_PRACT_DEDA_8
 
         private void Form_Controls_Info()
         {
+            // функция которая описывает свойства о элементах на форме в первый ричтекстбокс
+            // функция содержит много ифов, они нужны для того чтобы функция вывода информации не вызывалась для тех групп элементов которые вообще отсутствуют на панели(это было сделанно потому что при выводе описания о элементах, появлялись лишние пробелы)
+            // данные передаваемые в функцию, это строка с названием элемента, ссылка на переменную которая будет считать элементы на форме, и группу элементов которые принадленат к группе каких либо элементов(например группа кнопок, или тестбоксов)
+            // 3
             richTextBox1.Clear();
             richTextBox1.Text += "Controls on Form\n\n";
             if (Controls.OfType<Button>().Count() != 0)
@@ -808,16 +845,21 @@ namespace SILAEV_PRACT_DEDA_8
 
         private void Form1_ControlAdded(object sender, ControlEventArgs e)
         {
+            // Данная функция определяет, был ли добавлен на форму новый элемент, сразу же как новый элемент появляется на форме, то вызывается эта функция
+            // Данная вызывает другую функцию(эту же функцию мы вызывали при загрузке формы), которая в свою очередь переписывает информацию о свойствах элементов на форме в 1 picturebox'e
             Form_Controls_Info();
         }
 
         private void panel1_ControlAdded(object sender, ControlEventArgs e)
         {
+            // Данная функция определяет, был ли добавлен на панель новый элемент, сразу же как новый элемент появляется на панели, то вызывается эта функция
+            // Данная вызывает другую функцию(эту же функцию мы вызывали при загрузке формы), которая в свою очередь переписывает информацию о свойствах элементов на панели в 2 picturebox'e
             Panel_Controls_Info();
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
+            // При нажатии кнопки "справка" откроется новое окно с сообщением, которое выведет информацию о количестве элементов на форме и на панели
             MessageBox.Show("Panel\tForm\tName\n"+
                             panel_count_Button.ToString() + "\t" + form_count_Button.ToString() + "\tButton\n" +
                             panel_count_CheckBox.ToString() + "\t" + form_count_CheckBox.ToString() + "\tCheckBox\n" +
